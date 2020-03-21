@@ -1,0 +1,7 @@
+*.pyc
+*.DS_Store
+
+harvest.env
+
+node_modules/*
+.serverless/*

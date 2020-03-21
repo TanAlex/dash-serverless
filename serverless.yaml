@@ -1,0 +1,58 @@
+# serverless.yml
+
+service: dash-serveless
+
+plugins:
+  - serverless-python-requirements
+  - serverless-domain-manager
+  - serverless-wsgi
+  # - serverless-offline
+
+custom:
+  stage: ${opt:stage, self:provider.stage}
+  region: ${opt:region, self:provider.region}
+  wsgi:
+    app: app.server
+    pythonBin: python3
+    packRequirements: false
+  customDomain:
+    basePath: ""
+    domainName: dash.lab.ttan.cc
+    stage: ${opt:stage}
+    certificateArn: arn:aws:acm:us-west-2:788562962147:certificate/94588ad3-2d6a-4cf2-b07e-c4c873bca769
+    # certificateName: "*.ttan.cc"
+    createRoute53Record: true
+    endpointType: regional
+    securityPolicy: tls_1_2
+  pythonRequirements:
+    dockerizePip: true
+
+provider:
+  name: aws
+  runtime: python3.6
+  stage: dev
+  region: us-west-2
+  environment:
+    API_GATEWAY_BASE_PATH: ${self:custom.customDomain.basePath}
+    STRIP_STAGE_PATH: yes
+
+package:
+#   individually: true
+  exclude:
+    - '*.pyc'
+    - node_modules/**
+    - .serverless/**
+    - __pycache__/**
+    - serverless.yaml
+    - requirements.txt
+    - package.json
+    - package-lock.json
+    
+functions:
+  app:
+    handler: wsgi_handler.handler
+    events:
+      - http: ANY /
+      - http: 'ANY {proxy+}'
+    environment:
+      HELLO: 'world'
