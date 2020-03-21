@@ -1,6 +1,6 @@
 # Plotly - Dash app using AWS serverless
 
-Overview:
+### Overview:
 
 This is a demo app for Dash.
 
@@ -37,7 +37,7 @@ The plug is to help creating the Custom Domain Names in API Gateway.
 
 Steps:
 - Create a subdomain in Route53 like `lab.ttan.cc`
-- Create an ACM for certificates with "*.lab.ttan.cc", "*.ttan.cc" etc. Record this ACM's ARN
+- Create an ACM for certificates with "\*.lab.ttan.cc", "\*.ttan.cc" etc. Record this ACM's ARN
 - Put the domain name and ARN in serverless.yaml
 - run `sls create_domain --stage dev --region us-west-2`
 - run `sls deploy --stage dev --region us-west-2`
